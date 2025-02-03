@@ -8,8 +8,8 @@ BLACK = (0, 0, 0)
 
 url = "https://api.openweathermap.org/data/2.5/weather"
 
+# Start Pygame
 pygame.init()
-
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("The Super Cool Weather API")
 
@@ -27,6 +27,7 @@ params = {
     "appid": api_key,
 }
 
+# Fonts
 font = pygame.font.Font(None, 36)
 big_font = pygame.font.Font(None, 72)
 
@@ -42,6 +43,7 @@ while running:
     if response.status_code == 200:
         data = response.json()
 
+        # Get all the weather data
         main_info = data['main']
         weather_info = data['weather'][0]
         wind_info = data['wind']
@@ -52,6 +54,7 @@ while running:
         max_temp_celsius = main_info['temp_max'] - 273.15
         wind_speed_kmh = wind_info['speed'] * 3.6
 
+        # Get ready to display text
         current_weather_text = big_font.render("The Current Weather Outside", True, BLACK)
         temperature_text = font.render(f"Temp: {temperature_celsius:.2f} °C", True, BLACK)
         feels_like_text = font.render(f"Feels Like: {feels_like_celsius:.2f} °C", True, BLACK)
@@ -62,7 +65,8 @@ while running:
         description_text = font.render(f"{weather_info['description']}", True, BLACK)
 
         screen.blit(background_image, (0, 0))
-
+        
+        # Images for sun and clouds
         if weather_info['description'] == "overcast clouds" or "broken clouds":
             cloud_image = pygame.image.load("overcast.png")
             cloud_image = pygame.transform.scale(cloud_image, (124, 80.4))
@@ -73,6 +77,7 @@ while running:
             Sunny_image = pygame.transform.scale(Sunny_image, (125, 125))
             screen.blit(Sunny_image, (430, 440))
 
+        # Display text
         screen.blit(current_weather_text, (150, 80))
         screen.blit(temperature_text, (250, 180))
         screen.blit(feels_like_text, (550, 180))
